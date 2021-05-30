@@ -1,0 +1,46 @@
+version: '3'
+services:
+  zookeeper:
+    build: zookeeper/
+    container_name: zookeeper
+    hostname: zookeeper
+    domainname: confluent.local
+    restart: on-failure
+    volumes:
+      - ./certs/:/var/lib/secret
+      - ./data/zookeeper:/var/lib/zookeeper
+    environment:
+      KAFKA_OPTS: -Djava.security.auth.login.config=/tmp/zookeeper.sasl.jaas.conf 
+           -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+    networks:
+      default:
+        aliases:
+          - zookeeper.confluent.local
+
+
+  kafka:
+    build: kafka/
+    container_name: kafka
+    hostname: kafka
+    domainname: confluent.local
+    depends_on: 
+      - zookeeper
+    restart: on-failure
+    volumes:
+      - ./certs/:/var/lib/secret
+      - ./data/kafka/data:/var/lib/kafka/data
+    networks:
+      default:
+        aliases:
+          - kafka.confluent.local
+    ports:
+      - "9093:9093"
+    environment:
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/tmp/kafka.sasl.jaas.conf"
+
+
+volumes:
+  secret: {}
+
+networks:
+  default:
