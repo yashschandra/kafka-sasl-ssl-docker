@@ -57,6 +57,6 @@ docker-compose exec kafka kafka-acls  --authorizer-properties zookeeper.connect=
 docker-compose exec kafka kafka-acls  --authorizer-properties zookeeper.connect=zookeeper.confluent.local:2181 --add --allow-principal User:consumer --consumer --topic=* --group=*
 
 echo "Example configuration to access kafka:"
-echo "-> docker-compose exec kafka kafka-console-producer --broker-list kafka.confluent.local:9093 --topic test --producer.config /etc/kafka/consumer.properties"
+echo "-> docker-compose exec kafka kafka-console-producer --broker-list kafka.confluent.local:9093 --topic test --producer.config /etc/kafka/producer.properties"
 echo "-> docker-compose exec kafka kafka-console-consumer --bootstrap-server kafka.confluent.local:9093 --topic test --consumer.config /etc/kafka/consumer.properties --from-beginning"
 echo "-> docker-compose exec kafka kafkacat -L -b kafka.confluent.local:9093 -F /etc/kafka/kafkacat.conf -C -t test"
